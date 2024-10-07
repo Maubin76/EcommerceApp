@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Application.Models;
 
 namespace Application.Areas.Identity.Pages.Account
 {
@@ -22,11 +23,13 @@ namespace Application.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly GoogleCaptchaService _captchaService;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, GoogleCaptchaService captchaService)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _captchaService = captchaService;
         }
 
         /// <summary>
@@ -83,6 +86,9 @@ namespace Application.Areas.Identity.Pages.Account
             /// </summary>
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+
+            [Required]
+            public string Token { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -104,6 +110,14 @@ namespace Application.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            var captchaResult = await _captchaService.VerifyToken(Input.Token);
+
+            if (!captchaResult)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid captcha, please try again.");
+                return Page();
+            }
+
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
