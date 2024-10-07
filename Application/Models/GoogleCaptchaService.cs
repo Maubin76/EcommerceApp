@@ -27,7 +27,7 @@ namespace Application.Models
 
                     var googleResult = JsonConvert.DeserializeObject<GoogleCaptchaResponse>(responseString);
 
-                    return googleResult.success && googleResult.score >= 0.95;
+                    return googleResult.success && googleResult.score >= 0.5;
                 }
             }
             catch (Exception e)
