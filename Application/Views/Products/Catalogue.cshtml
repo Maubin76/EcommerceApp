@@ -1,0 +1,130 @@
+@using Microsoft.AspNetCore.Identity
+@using Application.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Catalogue";
+}
+<h1>@ViewData["Title"]</h1>
+
+@model List<Application.Models.Item> 
+
+<h2>Items</h2>
+
+<div class="row">   
+    <!-- Displays every items in the model (items in the database by extension) -->
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="@item.imageUrl" class="card-img-top" alt="@item.name">
+                <div class="card-body">
+                    <h5 class="card-title">@item.name</h5>
+                    <p class="card-text">@item.description</p>
+                    <p class="card-text"><strong>Price:</strong> @item.price <strong>€</strong></p>
+                    <div class="text-center">
+                        <!-- Create a form with the attributes of the items who can be submitted by the button-->
+                        <form class="add-to-cart-form" method="post">
+                            <input type="hidden" name="id" value="@item.id" />
+                            <input type="hidden" name="name" value="@item.name" />
+                            <input type="hidden" name="description" value="@item.description" />
+                            <input type="hidden" name="price" value="@item.price" />
+                            <input type="hidden" name="imageUrl" value="@item.imageUrl" />
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Modal Bootstrap when you are logged in and the item is added to cart -->
+<div class="modal fade" id="cartModalLogged" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Item added to cart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                The item has been successfully added to cart !
+            </div>
+            <div class="modal-footer">
+                <!-- Call the method in the controller Products-->
+                <a asp-area="" asp-controller="Products" asp-action="Cart" class="btn btn-primary">Go to your cart</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue shopping</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Bootstrap when you are not logged in and the item can't be added to cart -->
+
+<div class="modal fade" id="cartModalNotLogged" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Please connect to your account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                You have to be connected to buy items !
+            </div>
+            <div class="modal-footer">
+                <!-- Call the controller associated -->
+                <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/LogIn">Log in</a>
+                <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">Create an account</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="text/javascript">
+        var isAuthenticated = @SignInManager.IsSignedIn(User).ToString().ToLower();
+        $(document).ready(function () {
+            // Submit the form add-to-cart with AJAX
+            $('.add-to-cart-form').submit(function (event) {
+                event.preventDefault(); // Empêche le comportement par défaut (rechargement de page)
+
+                // Get the form
+                var form = $(this);
+                var formData = form.serialize();
+
+
+                
+                if (isAuthenticated){
+                    // Send ajax request if a user is signed in
+                    $.ajax({
+                        url: '/Products/AddToCart',  // Controller action
+                        type: 'POST',
+                        data: formData,
+                        success: function (response) {
+                            // If the item is added to a cart it displays the pop up
+                            if (response.success) {
+                                var myModal = new bootstrap.Modal(document.getElementById('cartModalLogged'), {});
+                                myModal.show();
+                            }
+                        },
+                        error: function () {
+                            alert('Une erreur est survenue lors de l\'ajout au panier.');
+                        }
+                    });
+                }else{ // if the user it displays the other pop up
+                    var myModal = new bootstrap.Modal(document.getElementById('cartModalNotLogged'), {});
+                    myModal.show();
+                }
+            });
+
+            
+        });
+    </script>
+}
+
+
