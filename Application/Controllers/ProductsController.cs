@@ -52,7 +52,6 @@ namespace Application.Controllers
                 price = price,
                 imageUrl = imageUrl};
             _cartService.AddItemToCart(_userManager.GetUserId(User), item);
-            _cartService.SaveCartToSession(HttpContext.Session, _userManager.GetUserId(User));
             return Json(new {success=true});
         }
         public IActionResult Cart(){
@@ -60,8 +59,8 @@ namespace Application.Controllers
             if (!_signInManager.IsSignedIn(User)){
                 return View("CartNotLogged");
             }else{
-                var cart = _cartService.GetCartFromUserId(HttpContext.Session,_userManager.GetUserId(User));
-                if(cart.items.Count==0){
+                var cart = _cartService.GetCart(_userManager.GetUserId(User));
+                if(cart.cartItems.Count==0){
                     return View("CartLogged");
                 }else{
                     return View("CartWithItems",cart);
@@ -75,8 +74,7 @@ namespace Application.Controllers
                 description = description,
                 price = price,
                 imageUrl = imageUrl};
-            _cartService.DeleteItemFromCart(_userManager.GetUserId(User), item);
-            _cartService.SaveCartToSession(HttpContext.Session, _userManager.GetUserId(User));
+            _cartService.RemoveItemFromCart(_userManager.GetUserId(User), item);
             return Cart();
         }
     }

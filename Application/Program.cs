@@ -24,7 +24,7 @@ namespace Application
     options.Cookie.HttpOnly = true; // Empêche l'accès au cookie depuis JavaScript
     options.Cookie.IsEssential = true; // Nécessaire pour que la session fonctionne
 });
-            builder.Services.AddSingleton<CartService>(); // Enregistre le CartService comme Singleton
+            builder.Services.AddScoped<CartService>();; // Enregistre le CartService comme Singleton
 
 
             var app = builder.Build();

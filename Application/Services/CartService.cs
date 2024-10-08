@@ -1,91 +1,93 @@
-using Application.Models; // Ajuste l'espace de noms selon ton projet
-using Application.Extensions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Application.Areas.Identity.Data;
+using Application.Models;
+using Microsoft.EntityFrameworkCore;
 
 public class CartService
 {
-    // Utilise un dictionnaire pour stocker les paniers par userId (string)
-    private Dictionary<string, Cart> _carts;
+    private readonly ApplicationDbContext _context;
 
-    public CartService()
+    public CartService(ApplicationDbContext context)
     {
-        _carts = new Dictionary<string, Cart>();
+        _context = context;
     }
 
-    // Récupère un panier à partir du userId ou crée un nouveau panier si l'utilisateur n'a pas encore de panier
-    public Cart GetCartFromUserId(ISession session, string userId)
+    // Récupérer un Cart avec ses CartItems et Items associés
+    public Cart GetCart(string userId)
     {
-        if (_carts.ContainsKey(userId))
-        {
-            return _carts[userId];
-        }
-        else
-        {
-            // Crée un nouveau panier pour cet utilisateur
-            var newCart = new Cart(Guid.NewGuid(), userId, new List<Item>());
-
-            // Ajoute le panier au dictionnaire
-            _carts[userId] = newCart;
-
-            return newCart;
-        }
+        return _context.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.item).FirstOrDefault(c => c.userId == userId);
     }
 
-    // Ajoute un article au panier d'un utilisateur spécifique
+    // Ajouter un Item à un Cart
     public void AddItemToCart(string userId, Item item)
     {
-        if (_carts.ContainsKey(userId))
+        var cart = _context.Carts.Include(c => c.cartItems).FirstOrDefault(c => c.userId == userId);
+
+        if (cart != null)
         {
-            _carts[userId].AddItem(item);
-        }
-        else
-        {
-            throw new KeyNotFoundException("L'utilisateur avec cet ID n'a pas de panier.");
+            var existingCartItem = cart.cartItems.FirstOrDefault(ci => ci.itemId == item.id);
+
+            // Vérifier si l'item existe déjà dans le cart
+            if (existingCartItem == null)
+            {
+                // Créer un nouveau CartItem si l'item n'existe pas déjà
+                var cartItem = new CartItem
+                (
+                    cart.id,
+                    cart,
+                    item // On peut lier directement l'item ici, si cela est approprié
+                );
+
+                cart.cartItems.Add(cartItem);
+                //_context.CartItems.Add(cartItem);
+                _context.SaveChanges(); // Enregistre les modifications dans la base de données
+            }
+            else
+            {
+                cart.cartItems.Add(existingCartItem);
+                _context.SaveChanges();
+            }
+        }else{
+            var newCart= new Cart(Guid.NewGuid(),userId,new List<CartItem>());
+            // Créer un nouveau CartItem si l'item n'existe pas déjà
+            var cartItem = new CartItem
+            (
+                newCart.id,
+                newCart,
+                item // On peut lier directement l'item ici, si cela est approprié
+            );
+            newCart.cartItems.Add(cartItem);
+            _context.Carts.Add(newCart);
+            //_context.CartItems.Add(cartItem);
+            _context.SaveChanges(); // Enregistre les modifications dans la base de données
+            
         }
     }
 
-    // Supprime un article du panier d'un utilisateur spécifique
-    public void DeleteItemFromCart(string userId, Item item)
+    // Supprimer un Item d'un Cart
+    public void RemoveItemFromCart(string userId, Item item)
     {
-        if (_carts.ContainsKey(userId))
+        var cart = _context.Carts.Include(c => c.cartItems).FirstOrDefault(c => c.userId == userId);
+        
+        if (cart != null)
         {
-            _carts[userId].DeleteItem(item);
-        }
-        else
-        {
-            throw new KeyNotFoundException("L'utilisateur avec cet ID n'a pas de panier.");
+            // Trouver le CartItem associé à l'item
+            var cartItemToRemove = cart.cartItems.FirstOrDefault(ci => ci.itemId == item.id);
+            if (cartItemToRemove != null)
+            {
+                cart.cartItems.Remove(cartItemToRemove);
+                _context.SaveChanges(); // Enregistre les modifications dans la base de données
+            }
         }
     }
 
-    // Sauvegarde le panier d'un utilisateur dans la session
-    public void SaveCartToSession(ISession session, string userId)
+    // Obtenir le prix total du Cart
+    public decimal GetTotalPrice(string userId)
     {
-        if (_carts.ContainsKey(userId))
-        {
-            session.SetObject("Cart", _carts[userId]);
-        }
-        else
-        {
-            throw new KeyNotFoundException("L'utilisateur avec cet ID n'a pas de panier.");
-        }
-    }
-
-    // Supprime le panier d'un utilisateur
-    public void RemoveCart(string userId)
-    {
-        if (_carts.ContainsKey(userId))
-        {
-            _carts.Remove(userId);
-        }
-        else
-        {
-            throw new KeyNotFoundException("L'utilisateur avec cet ID n'a pas de panier.");
-        }
-    }
-
-    // Obtient tous les paniers
-    public Dictionary<string, Cart> GetAllCarts()
-    {
-        return _carts;
+        var cart = GetCart(userId);
+        return cart?.GetPrice() ?? 0;
     }
 }
+
