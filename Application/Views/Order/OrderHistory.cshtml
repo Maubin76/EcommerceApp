@@ -1,0 +1,55 @@
+@using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "Order History";
+}
+<h1>@ViewData["Title"]</h1>
+
+@model List<Cart>
+
+ 
+
+<h2>Your Orders</h2>
+
+<div class="row">
+    @foreach (var cart in Model)
+    {
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Commande #@cart.id</h5> <!-- Remplacez OrderId par l'identifiant de la commande si existant -->
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Unit price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cartItem in cart.cartItems)
+                            {
+                                <tr>
+                                    <td>@cartItem.item.name<!-- Remplacez ProductName par le nom du produit -->
+                                    <img src="@cartItem.item.imageUrl" style="width: 50px; height: auto; object-fit: cover;"  class="card-img-top" alt="@cartItem.item.name"></td> 
+                                    <td>@cartItem.quantity</td> <!-- Remplacez Quantity par la quantité de l'article -->
+                                    <td>@cartItem.item.price</td>
+                                    <td>@(cartItem.quantity * cartItem.item.price) €</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <strong>Order price</strong>
+                    @cart.GetPrice() € <!-- Remplacez TotalPrice par le total de la commande -->
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

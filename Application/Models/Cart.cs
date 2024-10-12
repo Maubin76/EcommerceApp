@@ -9,6 +9,7 @@ namespace Application.Models
 
         public Guid id{get;set;} 
         public string userId { get; set; }
+        public bool isActive {get; set; }
         public List<CartItem> cartItems { get; set; } = new List<CartItem>();
         public Cart(){}
         
@@ -16,7 +17,8 @@ namespace Application.Models
         {
             id = _id;
             userId = _userId;
-            cartItems = _cartItems ?? new List<CartItem>();;
+            cartItems = _cartItems ?? new List<CartItem>();
+            isActive=true;
         }
 
         public override string ToString()
@@ -34,17 +36,6 @@ namespace Application.Models
             return finalPrice;
         }
 
-        public void AddItem(Item item){
-            var cartItem = new CartItem(this.id,this,item.id,item);
-            this.cartItems.Add(cartItem);
-        }
-        public void DeleteItem(Item item){
-            int itemId=item.id;
-            var itemToRemove = this.cartItems.FirstOrDefault(i => i.itemId == item.id);
-            if (itemToRemove != null)
-            {
-                this.cartItems.Remove(itemToRemove);
-            }
-        }
+        
     }
 }

@@ -15,15 +15,20 @@ public class CartService
     }
 
     // Récupérer un Cart avec ses CartItems et Items associés
-    public Cart GetCart(string userId)
+    public Cart GetActiveCart(string userId)
     {
-        return _context.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.item).FirstOrDefault(c => c.userId == userId);
+        return _context.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.item).FirstOrDefault(c => c.userId == userId && c.isActive);
+    }
+
+    public List<Cart> GetUnactiveCart(string userId)
+    {
+        return _context.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.item).Where(c => c.userId == userId && !c.isActive).ToList();
     }
 
     // Ajouter un Item à un Cart
     public void AddItemToCart(string userId, Item item)
     {
-        var cart = _context.Carts.Include(c => c.cartItems).FirstOrDefault(c => c.userId == userId);
+        var cart = _context.Carts.Include(c => c.cartItems).FirstOrDefault(c => c.userId == userId && c.isActive);
 
         if (cart != null)
         {
@@ -51,6 +56,8 @@ public class CartService
             }
         }else{
             var newCart= new Cart(Guid.NewGuid(),userId,new List<CartItem>());
+            _context.Carts.Add(newCart);
+            _context.SaveChanges(); 
             // Créer un nouveau CartItem si l'item n'existe pas déjà
             var cartItem = new CartItem
             (
@@ -59,7 +66,6 @@ public class CartService
                 1
             );
             newCart.cartItems.Add(cartItem);
-            _context.Carts.Add(newCart);
             _context.SaveChanges(); // Enregistre les modifications dans la base de données
             
         }
@@ -68,7 +74,7 @@ public class CartService
     // Supprimer un Item d'un Cart
     public void RemoveItemFromCart(string userId, Item item)
     {
-        var cart = _context.Carts.Include(c => c.cartItems).FirstOrDefault(c => c.userId == userId);
+        var cart = _context.Carts.Include(c => c.cartItems).FirstOrDefault(c => c.userId == userId && c.isActive);
         
         if (cart != null)
         {
@@ -87,10 +93,15 @@ public class CartService
         }
     }
 
+    public void BuyCart(string userId){
+        var cart=this.GetActiveCart(userId);
+        cart.isActive=false;
+        _context.SaveChanges(); 
+    }
     // Obtenir le prix total du Cart
     public decimal GetTotalPrice(string userId)
     {
-        var cart = GetCart(userId);
+        var cart = GetActiveCart(userId);
         return cart?.GetPrice() ?? 0;
     }
 }

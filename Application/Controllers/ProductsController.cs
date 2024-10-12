@@ -19,14 +19,14 @@ namespace Application.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
-    public ProductsController(ILogger<ProductsController> logger, ApplicationDbContext context, CartService cartService, SignInManager<ApplicationUser> signInManager,UserManager<ApplicationUser> userManager )
-    {
-        _logger = logger;
-        _context = context;
-        _cartService = cartService; // Inject the CartService
-        _signInManager=signInManager;
-        _userManager=userManager;
-    }
+        public ProductsController(ILogger<ProductsController> logger, ApplicationDbContext context, CartService cartService, SignInManager<ApplicationUser> signInManager,UserManager<ApplicationUser> userManager )
+        {
+            _logger = logger;
+            _context = context;
+            _cartService = cartService; // Inject the CartService
+            _signInManager=signInManager;
+            _userManager=userManager;
+        }
 
     
 
@@ -59,11 +59,15 @@ namespace Application.Controllers
             if (!_signInManager.IsSignedIn(User)){
                 return View("CartNotLogged");
             }else{
-                var cart = _cartService.GetCart(_userManager.GetUserId(User));
-                if(cart.cartItems.Count==0){
+                var cart = _cartService.GetActiveCart(_userManager.GetUserId(User));
+                if(cart==null){
                     return View("CartLogged");
                 }else{
-                    return View("CartWithItems",cart);
+                    if(cart.cartItems.Count==0){
+                        return View("CartLogged");
+                    }else{
+                        return View("CartWithItems",cart);
+                    }
                 }
             }
         }
@@ -75,6 +79,11 @@ namespace Application.Controllers
                 price = price,
                 imageUrl = imageUrl};
             _cartService.RemoveItemFromCart(_userManager.GetUserId(User), item);
+            return Cart();
+        }
+
+        public IActionResult Buy(){
+            _cartService.BuyCart(_userManager.GetUserId(User));
             return Cart();
         }
     }
