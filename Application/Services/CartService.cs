@@ -35,17 +35,17 @@ public class CartService
                 // Créer un nouveau CartItem si l'item n'existe pas déjà
                 var cartItem = new CartItem
                 (
-                    cart.id,
                     cart,
-                    item // On peut lier directement l'item ici, si cela est approprié
+                    item,
+                    1
                 );
 
                 cart.cartItems.Add(cartItem);
-                //_context.CartItems.Add(cartItem);
                 _context.SaveChanges(); // Enregistre les modifications dans la base de données
             }
             else
-            {
+            {   
+                existingCartItem.addQuantity();
                 cart.cartItems.Add(existingCartItem);
                 _context.SaveChanges();
             }
@@ -54,13 +54,12 @@ public class CartService
             // Créer un nouveau CartItem si l'item n'existe pas déjà
             var cartItem = new CartItem
             (
-                newCart.id,
                 newCart,
-                item // On peut lier directement l'item ici, si cela est approprié
+                item,
+                1
             );
             newCart.cartItems.Add(cartItem);
             _context.Carts.Add(newCart);
-            //_context.CartItems.Add(cartItem);
             _context.SaveChanges(); // Enregistre les modifications dans la base de données
             
         }
@@ -77,8 +76,13 @@ public class CartService
             var cartItemToRemove = cart.cartItems.FirstOrDefault(ci => ci.itemId == item.id);
             if (cartItemToRemove != null)
             {
-                cart.cartItems.Remove(cartItemToRemove);
-                _context.SaveChanges(); // Enregistre les modifications dans la base de données
+                if (cartItemToRemove.quantity==1){
+                    cart.cartItems.Remove(cartItemToRemove);
+                    _context.SaveChanges(); // Enregistre les modifications dans la base de données
+                }else{
+                    cartItemToRemove.reduceQuantity();
+                    _context.SaveChanges(); 
+                }
             }
         }
     }

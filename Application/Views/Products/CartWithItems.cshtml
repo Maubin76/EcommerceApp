@@ -2,10 +2,12 @@
 
 @{
     ViewData["Title"] = "Cart";
+    decimal totalPrice = 0;
 }
 <h1>@ViewData["Title"]</h1>
 
 @model Cart
+
  
 
 <h2>Your Items</h2>
@@ -14,20 +16,23 @@
 <div class="row">
     @foreach (var cartItem in Model.cartItems)
     {
+        var itemTotalPrice = cartItem.item.price * cartItem.quantity;
+        totalPrice += itemTotalPrice;
         <div class="col-md-4 mb-4">
             <div class="card">
                 <img src="@cartItem.item.imageUrl" class="card-img-top" alt="@cartItem.item.name">
                 <div class="card-body">
                     <h5 class="card-title">@cartItem.item.name</h5>
                     <p class="card-text">@cartItem.item.description</p>
-                    <p class="card-text"><strong>Price:</strong> @cartItem.item.price <strong>€</strong></p>
+                    <p class="card-text"><strong>Quantity : </strong>@cartItem.quantity</p>
+                    <p class="card-text"><strong>Price :</strong> @(@cartItem.item.price * @cartItem.quantity) <strong>€</strong></p>
                     <form asp-controller="Products" asp-action="DeleteFromCart">
                             <input type="hidden" name="id" value="@cartItem.item.id" />
                             <input type="hidden" name="name" value="@cartItem.item.name" />
                             <input type="hidden" name="description" value="@cartItem.item.description" />
                             <input type="hidden" name="price" value="@cartItem.item.price" />
                             <input type="hidden" name="imageUrl" value="@cartItem.item.imageUrl" />
-                            <button type="submit" class="btn btn-primary" style="background-color: red; border: none; color: white;">Delete this item</button>
+                            <button type="submit" class="btn btn-primary" style="background-color: red; border: none; color: white;">Remove one from cart</button>
                         </form>
                     <div class="text-center">
                     </div>
@@ -35,7 +40,10 @@
             </div>
         </div>
     }
+    
+    <h1>Total Price: @totalPrice €</h1>
     <form  >
         <button type="submit" class="btn btn-primary">Purchase</button>
     </form>
 </div>
+
