@@ -5,7 +5,7 @@
 namespace Application.Migrations
 {
     /// <inheritdoc />
-    public partial class AdditionalFields : Migration
+    public partial class CartActive2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
