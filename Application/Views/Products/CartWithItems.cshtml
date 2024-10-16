@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Cart";
-    decimal totalPrice = 0;
+    decimal totalPrice = 0; // Variable to calculate the price of the cart
 }
 <h1>@ViewData["Title"]</h1>
 
@@ -14,6 +14,7 @@
 
 
 <div class="row">
+    <!-- Displays every cartitem in the cart-->
     @foreach (var cartItem in Model.cartItems)
     {
         var itemTotalPrice = cartItem.item.price * cartItem.quantity;
@@ -26,6 +27,7 @@
                     <p class="card-text">@cartItem.item.description</p>
                     <p class="card-text"><strong>Quantity : </strong>@cartItem.quantity</p>
                     <p class="card-text"><strong>Price :</strong> @(@cartItem.item.price * @cartItem.quantity) <strong>€</strong></p>
+                    <!-- Delete on item from the Cart by calling the action in the ProductsController-->
                     <form asp-controller="Products" asp-action="DeleteFromCart">
                             <input type="hidden" name="id" value="@cartItem.item.id" />
                             <input type="hidden" name="name" value="@cartItem.item.name" />
@@ -42,6 +44,7 @@
     }
     
     <h1>Total Price: @totalPrice €</h1>
+    <!-- Call the Buy action  in the ProductsController-->
     <form asp-controller="Products" asp-action="Buy">
         <button type="submit" class="btn btn-primary">Purchase</button>
     </form>

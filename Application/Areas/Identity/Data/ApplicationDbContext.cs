@@ -26,10 +26,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // Add your customizations after calling base.OnModelCreating(builder);
         builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
 
-        // Configuration de la relation many-to-many avec une entité de liaison
+        //Configuration for CartItem
         builder.Entity<CartItem>()
-            .HasKey(ci => new { ci.cartId, ci.itemId }); // Clé composite
+            .HasKey(ci => new { ci.cartId, ci.itemId }); // Composite Key
 
+        //Configuration for many-to-many relation with Items and Cart
         builder.Entity<CartItem>()
             .HasOne(ci => ci.cart)
             .WithMany(c => c.cartItems)
@@ -40,13 +41,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany()
             .HasForeignKey(ci => ci.itemId);
 
-        // Configuration pour Cart
+        // Configuration for Cart
         builder.Entity<Cart>()
-        .HasKey(c => c.id); // Clé primaire pour Cart
+        .HasKey(c => c.id); // Primary key for Cart
 
-        // Configuration pour Item
+        // Configuration for Item
         builder.Entity<Item>()
-        .HasKey(i => i.id); // Clé primaire pour Item
+        .HasKey(i => i.id); // Primary key Item
 
         
     

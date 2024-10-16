@@ -9,6 +9,7 @@ namespace Application.Models
 
         public Guid id{get;set;} 
         public string userId { get; set; }
+        // Attributes isActive is here to know if the cart has been bought or not
         public bool isActive {get; set; }
         public List<CartItem> cartItems { get; set; } = new List<CartItem>();
         public Cart(){}
@@ -21,13 +22,9 @@ namespace Application.Models
             isActive=true;
         }
 
-        public override string ToString()
-    {
-        //string cartItemsString = string.Join(", ", cartItems.Select(ci => ci.ToString()));
-        return $"Cart ID: {id}, User ID: {userId}, Cart Items: test";
-    }
-
+        // Get the total price of the cart
         public decimal GetPrice(){
+            // Get the list of items in the cart
             IEnumerable<Item> items = this.cartItems.Select(ci => ci.item);
             decimal finalPrice=0;
             foreach (Item i in items){

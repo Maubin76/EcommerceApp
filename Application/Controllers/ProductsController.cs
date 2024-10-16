@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Diagnostics;
 using Application.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.Features;
 
 
 namespace Application.Controllers
@@ -31,9 +32,10 @@ namespace Application.Controllers
     
 
         
-        public async Task<IActionResult> Catalogue()
+        public async Task<IActionResult> Catalog()
         {
-            var productDisp=await _context.Items.ToListAsync();
+            //Get the list of all the items in the datable
+            List<Item> productDisp=await _context.Items.ToListAsync();
             return View(productDisp);
         }
 
@@ -43,45 +45,57 @@ namespace Application.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        // Add an item to cart and send a response to the view to display a pop up
         [HttpPost]
         public JsonResult AddToCart(int id, string name, string description, decimal price, string imageUrl){
-            var item = new Item{
+            // Create an item object with the attributes sent by the view
+            Item item = new Item{
                 id = id,
                 name = name,
                 description = description,
                 price = price,
                 imageUrl = imageUrl};
+            // Add this item to the cart associated to the user
             _cartService.AddItemToCart(_userManager.GetUserId(User), item);
+            // Returns a JSON response indicating a success
             return Json(new {success=true});
         }
+
+        // Display the good cart view depending on the context
         public IActionResult Cart(){
-            
-            if (!_signInManager.IsSignedIn(User)){
+            if (!_signInManager.IsSignedIn(User)){ // User not logged in
                 return View("CartNotLogged");
-            }else{
-                var cart = _cartService.GetActiveCart(_userManager.GetUserId(User));
-                if(cart==null){
-                    return View("CartLogged");
-                }else{
-                    if(cart.cartItems.Count==0){
+            }else{ // User logged in
+                // Get the active cart associated to the user
+                Cart cart = _cartService.GetActiveCart(_userManager.GetUserId(User));
+                if(cart==null){ // User doesn't have a cart 
+                    return View("CartLogged"); // Displays view wanted
+                }else{ //User has a Cart
+                    if(cart.cartItems.Count==0){ // No item in the cart
                         return View("CartLogged");
                     }else{
+                        //return the view CartWithItems passing a cart object as a model
                         return View("CartWithItems",cart);
                     }
                 }
             }
         }
+
+        // Delete an item from the cart and displays the Cart views updated
         public IActionResult DeleteFromCart(int id, string name, string description, decimal price, string imageUrl){
-            var item = new Item{
+            // Instantiate an item with the attributes sent by the view
+            Item item = new Item{
                 id = id,
                 name = name,
                 description = description,
                 price = price,
                 imageUrl = imageUrl};
+            //Remove item from the cart with this method
             _cartService.RemoveItemFromCart(_userManager.GetUserId(User), item);
             return Cart();
         }
 
+        // Set the order to bought in the database 
         public IActionResult Buy(){
             _cartService.BuyCart(_userManager.GetUserId(User));
             return Cart();

@@ -24,20 +24,23 @@ namespace Application.Controllers
         {
             _logger = logger;
             _context = context;
-            _cartService = cartService; // Inject the CartService
+            _cartService = cartService; 
             _signInManager=signInManager;
             _userManager=userManager;
         }
 
+        // Displays the good view of order history depending on the context
         public IActionResult OrderHistory(){
             
             if (!_signInManager.IsSignedIn(User)){
-                return View("OrderHistoryNotLogged");
+                return View("OrderHistoryNotLogged"); // Display the good view 
             }else{
-                var cart = _cartService.GetUnactiveCart(_userManager.GetUserId(User));
-                if (cart.Count==0){
+                // Get the list of all orders made by the user
+                List<Cart> cart = _cartService.GetUnactiveCart(_userManager.GetUserId(User));
+                if (cart.Count==0){ // If no order has been made yet
                     return View("OrderHistoryNotYet");
                 }else{
+                    //Return the view OrderHistory passing the cart object as a model
                     return View("OrderHistory",cart);
                 }
             }

@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Application.Models
 {
-    
+    // Class CartItem is doing the link between items and cart
     public class CartItem
     {
         public Guid cartId{get;set;} 
