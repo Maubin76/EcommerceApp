@@ -75,5 +75,5 @@ _[Ss]cripts
 *.dot[Cc]over
 .vs/
 /Application/obj/
-/Application/appsettings.json
+*.json
 
