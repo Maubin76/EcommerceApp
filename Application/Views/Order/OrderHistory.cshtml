@@ -1,0 +1,56 @@
+@using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "Order History"; // Setting the page title to "Order History".
+}
+<h1>@ViewData["Title"]</h1> <!-- Displaying the title as a heading. -->
+
+@model List<Cart> // The model being passed to the view is a list of Cart objects.
+
+<h2>Your Orders</h2> <!-- Heading for the orders section. -->
+
+<div class="row">
+    <!-- Display the orders made by the user -->
+    @foreach (var cart in Model) // Loop through each cart object in the model.
+    {
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Order #@cart.id</h5> <!-- Display the order ID if it exists. -->
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Product</th> <!-- Column for the product name. -->
+                                <th>Quantity</th> <!-- Column for the product quantity. -->
+                                <th>Unit price</th> <!-- Column for the price per unit. -->
+                                <th>Total</th> <!-- Column for the total price per item. -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cartItem in cart.cartItems) // Loop through each item in the cart.
+                            {
+                                <tr>
+                                    <td>
+                                        @cartItem.item.name <!-- Display the product name. -->
+                                        <img src="@cartItem.item.imageUrl" style="width: 50px; height: auto; object-fit: cover;" class="card-img-top" alt="@cartItem.item.name"> <!-- Display product image with alt as product name. -->
+                                    </td> 
+                                    <td>@cartItem.quantity</td> <!-- Display the quantity of the item. -->
+                                    <td>@cartItem.item.price</td> <!-- Display the unit price of the item. -->
+                                    <td>@(cartItem.quantity * cartItem.item.price) €</td> <!-- Display the total price for the item (quantity * price). -->
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <strong>Order price</strong>
+                    @cart.GetPrice() € <!-- Display the total price for the order. -->
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

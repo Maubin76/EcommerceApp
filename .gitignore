@@ -75,4 +75,4 @@ _[Ss]cripts
 *.dot[Cc]over
 .vs/
 /Application/obj/
-appsettings.json
+*.json

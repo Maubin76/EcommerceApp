@@ -1,0 +1,14 @@
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "Order History"; // Setting the page title to "Order History".
+}
+<h1>@ViewData["Title"]</h1> <!-- Displaying the title as a heading. -->
+
+<h2>You have to be connected to access your order history</h2> 
+
+<div>
+    <!-- Button that directs the user to the login page -->
+    <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/LogIn">Log in</a>
+    <!-- Button that directs the user to the registration page to create an account -->
+    <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">Create an account</a>
+</div>
