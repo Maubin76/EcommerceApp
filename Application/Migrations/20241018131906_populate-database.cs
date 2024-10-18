@@ -65,6 +65,63 @@ namespace Application.Migrations
                 columns: new[] { "id", "name", "description", "price", "imageUrl" },
                 values: new object[] { item3.id, item3.name, item3.description, item3.price, item3.imageUrl }
             );
+
+            var item4 = new Item
+            {
+                id = 4,
+                imageUrl = "/items/Joconde.png",
+                name = "The Timeless Smile",
+                description = "This digital reinterpretation of the Mona Lisa stays true to the elegance " +
+                "and mystery of Leonardo da Vinci's masterpiece. The serene, enigmatic expression, soft lighting, " +
+                "and the gentle flow of the natural background evoke the Renaissance charm. The earthy tones and " +
+                "balanced composition honor the spirit of the original, creating a fresh yet faithful homage to this iconic work.",
+                price = 3000
+            };
+
+            migrationBuilder.InsertData(
+                table: "Items",
+                columns: new[] { "id", "name", "description", "price", "imageUrl" },
+                values: new object[] { item4.id, item4.name, item4.description, item4.price, item4.imageUrl }
+            );
+
+            var item5 = new Item
+            {
+                id = 5,
+                imageUrl = "/items/Moutains_river.png",
+                name = "Majesty of the Sierra Nevada",
+                description = "This digital remake of Albert Bierstadt's \"Among the Sierra Nevada Mountains, " +
+                "California\" captures the awe-inspiring beauty of the American wilderness. " +
+                "Towering mountains bathed in warm sunlight reflect on the calm lake below, while " +
+                "wildlife roams freely. The vibrant, natural colors and serene atmosphere echo the grandeur " +
+                "and peace of the original landscape, celebrating nature's untouched splendor.",
+                price = 1200
+            };
+
+            migrationBuilder.InsertData(
+                table: "Items",
+                columns: new[] { "id", "name", "description", "price", "imageUrl" },
+                values: new object[] { item5.id, item5.name, item5.description, item5.price, item5.imageUrl }
+            );
+
+            var item6 = new Item
+            {
+                id = 6,
+                imageUrl = "/items/Time.png",
+                name = "The Persistence of Dreams",
+                description = "This surreal AI-generated painting draws inspiration from Salvador Dalí’s style, " +
+                "featuring melting clocks draped over distorted objects in a barren landscape. The fluid shapes" +
+                " and elongated shadows evoke a dreamlike atmosphere, warping the sense of time and reality. Soft " +
+                "yet striking colors enhance the otherworldly, surreal mood of the piece.",
+                price = 600
+            };
+
+            migrationBuilder.InsertData(
+                table: "Items",
+                columns: new[] { "id", "name", "description", "price", "imageUrl" },
+                values: new object[] { item6.id, item6.name, item6.description, item6.price, item6.imageUrl }
+            );
+
+
         }
 
         /// <inheritdoc />
