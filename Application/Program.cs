@@ -19,7 +19,7 @@ namespace Application
 
             //builder.Services.Configure<EmailSenderConfig>(builder.Configuration.GetSection("Sendgrid"));
             builder.Services.AddTransient(typeof(EmailSender));
-            var APIKey = builder.Configuration["Sendgrid:APIKey"];
+            var APIKey = builder.Configuration["Sendgrid:APIKey"] ?? throw new InvalidOperationException("API key not found.");
 
             var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
 
