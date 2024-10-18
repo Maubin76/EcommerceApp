@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Application.Areas.Identity.Data;
 using Application.Models;
+using Application.Services;
+
 namespace Application
 {
     public class Program
@@ -14,6 +16,10 @@ namespace Application
 
             builder.Services.Configure<GoogleCaptchaConfig>(builder.Configuration.GetSection("GoogleReCaptcha"));
             builder.Services.AddTransient(typeof(GoogleCaptchaService));
+
+            //builder.Services.Configure<EmailSenderConfig>(builder.Configuration.GetSection("Sendgrid"));
+            builder.Services.AddTransient(typeof(EmailSender));
+            var APIKey = builder.Configuration["Sendgrid:APIKey"] ?? throw new InvalidOperationException("API key not found.");
 
             var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
 

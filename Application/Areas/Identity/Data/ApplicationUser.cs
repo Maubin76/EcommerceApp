@@ -16,5 +16,5 @@ public class ApplicationUser : IdentityUser
      * Override the property from IdentityUser class so the users do not have to confirm their email addresses.
      * Email confirmation may be implemented later once we found a way to manage it
      */
-    public override bool EmailConfirmed { get; set; } = true;
+    public override bool EmailConfirmed { get; set; }
 }
