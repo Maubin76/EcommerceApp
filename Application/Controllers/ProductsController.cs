@@ -19,24 +19,26 @@ namespace Application.Controllers
         private readonly CartService _cartService;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ItemService _itemService;
 
-        public ProductsController(ILogger<ProductsController> logger, ApplicationDbContext context, CartService cartService, SignInManager<ApplicationUser> signInManager,UserManager<ApplicationUser> userManager )
+        public ProductsController(ILogger<ProductsController> logger, ApplicationDbContext context, CartService cartService, SignInManager<ApplicationUser> signInManager,UserManager<ApplicationUser> userManager, ItemService itemService )
         {
             _logger = logger;
             _context = context;
             _cartService = cartService; // Inject the CartService
             _signInManager=signInManager;
             _userManager=userManager;
+            _itemService=itemService;
         }
 
     
 
-        
-        public async Task<IActionResult> Catalog()
+        // Return the view with the items according to the filters
+        public async Task<IActionResult> Catalog(string category, decimal? minPrice, decimal? maxPrice)
         {
             //Get the list of all the items in the datable
-            List<Item> productDisp=await _context.Items.ToListAsync();
-            return View(productDisp);
+            var productList= await _itemService.GetFilteredItemsAsync(category,minPrice,maxPrice);
+            return View(productList);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -47,14 +49,15 @@ namespace Application.Controllers
 
         // Add an item to cart and send a response to the view to display a pop up
         [HttpPost]
-        public JsonResult AddToCart(int id, string name, string description, decimal price, string imageUrl){
+        public JsonResult AddToCart(int id, string name, string description, decimal price, string imageUrl,string category){
             // Create an item object with the attributes sent by the view
             Item item = new Item{
                 id = id,
                 name = name,
                 description = description,
                 price = price,
-                imageUrl = imageUrl};
+                imageUrl = imageUrl,
+                category=category};
             // Add this item to the cart associated to the user
             _cartService.AddItemToCart(_userManager.GetUserId(User), item);
             // Returns a JSON response indicating a success
@@ -82,14 +85,15 @@ namespace Application.Controllers
         }
 
         // Delete an item from the cart and displays the Cart views updated
-        public IActionResult DeleteFromCart(int id, string name, string description, decimal price, string imageUrl){
+        public IActionResult DeleteFromCart(int id, string name, string description, decimal price, string imageUrl, string category){
             // Instantiate an item with the attributes sent by the view
             Item item = new Item{
                 id = id,
                 name = name,
                 description = description,
                 price = price,
-                imageUrl = imageUrl};
+                imageUrl = imageUrl,
+                category=category};
             //Remove item from the cart with this method
             _cartService.RemoveItemFromCart(_userManager.GetUserId(User), item);
             return Cart();

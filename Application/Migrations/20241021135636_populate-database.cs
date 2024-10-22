@@ -21,13 +21,14 @@ namespace Application.Migrations
                     "poses, are framed by crashing waves and dark clouds, with rays of light cutting through " +
                     "to highlight their emotional turmoil. The natural palette of stormy blues and muted flesh " +
                     "tones emphasizes the intensity of the human struggle against nature.",
-                price = 1800
+                price = 1800,
+                category="Category1"
             };
 
             migrationBuilder.InsertData(
                 table: "Items",
-                columns: new[] { "id", "name", "description", "price", "imageUrl" },
-                values: new object[] { item1.id, item1.name, item1.description, item1.price, item1.imageUrl }
+                columns: new[] { "id", "name", "description", "price", "imageUrl","category" },
+                values: new object[] { item1.id, item1.name, item1.description, item1.price, item1.imageUrl,item1.category }
             );
 
             var item2 = new Item
@@ -39,13 +40,14 @@ namespace Application.Migrations
                     "of anguish but within a more natural, serene landscape. The central figure " +
                     "is set against flowing hills and soft skies, where bold brushstrokes in earthy " +
                     "tones blend human distress with the beauty of nature, creating a powerful contrast.",
-                price = 1100
+                price = 1100,
+                category="Category2"
             };
 
             migrationBuilder.InsertData(
                 table: "Items",
-                columns: new[] { "id", "name", "description", "price", "imageUrl" },
-                values: new object[] { item2.id, item2.name, item2.description, item2.price, item2.imageUrl }
+                columns: new[] { "id", "name", "description", "price", "imageUrl","category" },
+                values: new object[] { item2.id, item2.name, item2.description, item2.price, item2.imageUrl,item2.category }
             );
 
             var item3 = new Item
@@ -57,13 +59,14 @@ namespace Application.Migrations
                 "style, with swirling brushstrokes and vivid colors. The dreamlike landscape features " +
                 "rolling hills under a dynamic starry sky, where bold stars and twisting clouds create " +
                 "a sense of vibrant energy, reminiscent of the post-impressionist master’s emotional intensity.",
-                price = 500
+                price = 500,
+                category="Category3"
             };
 
             migrationBuilder.InsertData(
                 table: "Items",
-                columns: new[] { "id", "name", "description", "price", "imageUrl" },
-                values: new object[] { item3.id, item3.name, item3.description, item3.price, item3.imageUrl }
+                columns: new[] { "id", "name", "description", "price", "imageUrl","category" },
+                values: new object[] { item3.id, item3.name, item3.description, item3.price, item3.imageUrl,item3.category }
             );
 
             var item4 = new Item
@@ -75,13 +78,14 @@ namespace Application.Migrations
                 "and mystery of Leonardo da Vinci's masterpiece. The serene, enigmatic expression, soft lighting, " +
                 "and the gentle flow of the natural background evoke the Renaissance charm. The earthy tones and " +
                 "balanced composition honor the spirit of the original, creating a fresh yet faithful homage to this iconic work.",
-                price = 3000
+                price = 3000,
+                category="Category1"
             };
 
             migrationBuilder.InsertData(
                 table: "Items",
-                columns: new[] { "id", "name", "description", "price", "imageUrl" },
-                values: new object[] { item4.id, item4.name, item4.description, item4.price, item4.imageUrl }
+                columns: new[] { "id", "name", "description", "price", "imageUrl","category" },
+                values: new object[] { item4.id, item4.name, item4.description, item4.price, item4.imageUrl,item4.category }
             );
 
             var item5 = new Item
@@ -94,13 +98,14 @@ namespace Application.Migrations
                 "Towering mountains bathed in warm sunlight reflect on the calm lake below, while " +
                 "wildlife roams freely. The vibrant, natural colors and serene atmosphere echo the grandeur " +
                 "and peace of the original landscape, celebrating nature's untouched splendor.",
-                price = 1200
+                price = 1200,
+                category="Category1"
             };
 
             migrationBuilder.InsertData(
                 table: "Items",
-                columns: new[] { "id", "name", "description", "price", "imageUrl" },
-                values: new object[] { item5.id, item5.name, item5.description, item5.price, item5.imageUrl }
+                columns: new[] { "id", "name", "description", "price", "imageUrl","category" },
+                values: new object[] { item5.id, item5.name, item5.description, item5.price, item5.imageUrl,item5.category }
             );
 
             var item6 = new Item
@@ -112,13 +117,14 @@ namespace Application.Migrations
                 "featuring melting clocks draped over distorted objects in a barren landscape. The fluid shapes" +
                 " and elongated shadows evoke a dreamlike atmosphere, warping the sense of time and reality. Soft " +
                 "yet striking colors enhance the otherworldly, surreal mood of the piece.",
-                price = 600
+                price = 600,
+                category="Category1"
             };
 
             migrationBuilder.InsertData(
                 table: "Items",
-                columns: new[] { "id", "name", "description", "price", "imageUrl" },
-                values: new object[] { item6.id, item6.name, item6.description, item6.price, item6.imageUrl }
+                columns: new[] { "id", "name", "description", "price", "imageUrl","category" },
+                values: new object[] { item6.id, item6.name, item6.description, item6.price, item6.imageUrl,item6.category }
             );
 
 
