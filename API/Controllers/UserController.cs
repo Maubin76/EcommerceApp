@@ -28,16 +28,15 @@ namespace API.Controllers
             return new JsonResult(Ok(user));
         }
 
-        // Get
-        [HttpGet]
-        public JsonResult Get(String id)
-        {
-            var result = _context.Users.Find(id);
-            if (result == null) return new JsonResult(NotFound());
+            // Get
+            [HttpGet]
+            public JsonResult Get(String id)
+            {
+                var result = _context.Users.Find(id);
+                if (result == null) return new JsonResult(NotFound());
 
-            return new JsonResult(Ok(result));
-
-        }
+                return new JsonResult(Ok(result));
+            }
 
         // Delete
         [HttpDelete]
