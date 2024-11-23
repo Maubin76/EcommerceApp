@@ -1,0 +1,54 @@
+/* Style pour le système d'étoiles */
+.star-rating {
+    direction: ltr; /* Inverse l'ordre des étoiles (5 à 1) */
+    display: inline-flex;
+    font-size: 2rem;
+}
+
+.star-rating input {
+    display: none; /* Cache les inputs radio */
+}
+
+.star-rating label {
+    color: #ddd; /* Couleur des étoiles non sélectionnées */
+    cursor: pointer;
+}
+
+.star-rating input:checked ~ label {
+    color: #ffc107; /* Couleur des étoiles sélectionnées */
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #ffdb3a; /* Couleur au survol */
+}
+
+/* Style pour le formulaire */
+form {
+    max-width: 400px;
+    margin: 50px auto;
+    font-family: Arial, sans-serif;
+}
+
+textarea {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+button {
+    display: block;
+    margin: 20px 0;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

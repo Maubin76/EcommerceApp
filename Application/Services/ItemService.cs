@@ -42,6 +42,23 @@ public class ItemService
         // Execute request and send the response as a list
         return await query.ToListAsync();
     }
+
+    // Get the item in the database by its id
+    public Item GetItemById(int id)
+    {
+        // Fetch the item from the database using the ID.
+        var item = _context.Items.FirstOrDefault(i => i.id == id);
+        
+        // Optionally, handle cases where the item is not found.
+        if (item == null)
+        {
+            throw new Exception($"Item with ID {id} not found.");
+        }
+
+        return item;
+    }
+
+
 }
 
 

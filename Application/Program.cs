@@ -37,6 +37,7 @@ namespace Application
 });
             builder.Services.AddScoped<CartService>(); // Enregistre le CartService comme Singleton
             builder.Services.AddScoped<ItemService>();
+            builder.Services.AddScoped<ReviewService>();
 
 
             var app = builder.Build();
