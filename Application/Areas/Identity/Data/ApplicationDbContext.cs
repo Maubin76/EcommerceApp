@@ -49,15 +49,20 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // Configuration for Item
         builder.Entity<Item>()
         .HasKey(i => i.id); // Primary key Item
-
+        
         //Configuration for Review
         builder.Entity<Review>()
         .HasKey(r=>r.id); // Primary key Review
+    }
 
-        
+    public List<CartItem> GetAllOdersFromUser(String UserId)
+    {
+        // Retrieve all CartItems related to a user's carts
+        var orders = CartItems
+            .Where(ci => ci.cart.userId == UserId) // Filter by UserId in Cart
+            .ToList();
 
-        
-    
+        return orders;
     }
 }
 
