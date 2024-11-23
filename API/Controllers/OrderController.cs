@@ -47,5 +47,14 @@ namespace API.Controllers
 
             return new JsonResult(Ok(result));
         }
+
+        // Get all orders from 1 user
+        [HttpGet()]
+        public JsonResult GetAllFrom1User(String id)
+        {
+            var result = _context.GetAllOdersFromUser(id);
+
+            return new JsonResult(Ok(result));
+        }
     }
 }
