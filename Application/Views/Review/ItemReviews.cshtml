@@ -1,0 +1,39 @@
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "Watch Reviews";
+}
+
+@model (Item item, List<Review> reviews,double averageRating)
+
+
+<div class="page-container">
+    <!-- Item display -->
+<div class="product-section">
+    <img src="@Model.item.imageUrl" alt="@Model.item.name" class="product-image">
+
+    <div class="product-details">
+        <h1>@Model.item.name</h1>
+        <div class="star-rating" data-rating="@Model.averageRating.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)"></div>
+        <span class="rating-text">(@Model.averageRating/5)</span>
+    </div>
+
+</div>
+
+    <!-- Review list -->
+    <div class="reviews-container">
+        @foreach (var review in Model.reviews)
+        {
+            <div class="review-item">
+                <div class="star-rating" data-rating="@review.rating"></div>
+                <div class="comment">@review.comment</div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Style{
+    <link rel="stylesheet" href="~/css/itemReview.css" />
+}
+@section Scripts{
+    <script src="~/js/itemReview.js"></script>
+}

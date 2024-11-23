@@ -52,7 +52,7 @@
                     <h5 class="card-title">@item.name</h5>
                     <p class="card-text">@item.description</p>
                     <p class="card-text"><strong>Price:</strong> @item.price <strong>€</strong></p>
-                    <div class="text-center">
+                    <div class="d-flex gap-2 justify-content-center">
                         <!-- Create a form with the attributes of the items who can be submitted by the button-->
                         <form class="add-to-cart-form" method="post">
                             <input type="hidden" name="id" value="@item.id" />
@@ -62,7 +62,9 @@
                             <input type="hidden" name="imageUrl" value="@item.imageUrl" />
                             <input type="hidden" name="category" value="@item.category" />
                             <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
+                        </form> 
+                        <a asp-route-itemid="@item.id" asp-controller="Review" asp-action="ItemReviews" class="btn btn-success">Watch reviews</a>
+
         
         </div>
         </div>

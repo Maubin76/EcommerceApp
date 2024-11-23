@@ -16,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
     public DbSet<Item> Items {get;set;}
     public DbSet<Cart> Carts { get; set; }
+    public DbSet<Review> Reviews{get; set;}
     public DbSet<CartItem> CartItems { get; set; } // Entité de liaison
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -48,6 +49,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // Configuration for Item
         builder.Entity<Item>()
         .HasKey(i => i.id); // Primary key Item
+
+        //Configuration for Review
+        builder.Entity<Review>()
+        .HasKey(r=>r.id); // Primary key Review
+
+        
 
         
     
