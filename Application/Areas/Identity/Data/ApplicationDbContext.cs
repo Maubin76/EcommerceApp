@@ -64,6 +64,24 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
         return orders;
     }
+
+    public List<Review> GetAllReviewsFromUer(String UserId)
+    {
+        var reviews = Reviews
+            .Where(ci => ci.userId == UserId)
+            .ToList();
+
+        return reviews;
+    }
+
+    public List<Review> GetAllReviewsOfItem(int ItemId)
+    {
+        var reviews = Reviews
+            .Where(ci => ci.itemId == ItemId)
+            .ToList();
+
+        return reviews;
+    }
 }
 
 public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>

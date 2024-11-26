@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Application.Areas.Identity.Data;
@@ -17,4 +18,9 @@ public class ApplicationUser : IdentityUser
      * Email confirmation may be implemented later once we found a way to manage it
      */
     public override bool EmailConfirmed { get; set; }
+
+    public static implicit operator ApplicationUser(Review v)
+    {
+        throw new NotImplementedException();
+    }
 }
