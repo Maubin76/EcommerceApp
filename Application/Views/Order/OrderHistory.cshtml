@@ -39,6 +39,7 @@
                                     <td>@cartItem.quantity</td> <!-- Display the quantity of the item. -->
                                     <td>@cartItem.item.price</td> <!-- Display the unit price of the item. -->
                                     <td>@(cartItem.quantity * cartItem.item.price) €</td> <!-- Display the total price for the item (quantity * price). -->
+                                    <td><a asp-route-itemid="@cartItem.item.id" asp-controller="Review" asp-action="AddReviewPage" class="btn btn-success" >Add a review</a></td>
                                 </tr>
                             }
                         </tbody>

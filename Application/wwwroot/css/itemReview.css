@@ -1,0 +1,111 @@
+.page-container {
+    margin: 2rem auto;
+    max-width: 800px;
+    font-family: Arial, sans-serif;
+  }
+/* Conteneur principal du produit */
+.product-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2rem auto;
+    max-width: 800px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Détails du produit (nom, étoiles, moyenne) */
+  .product-details {
+    flex: 1;
+    margin-left: 10px;
+  }
+  
+  /* Nom du produit */
+  .product-details h1 {
+    font-size: 1.8rem;
+    color: #333;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+  
+  
+/* Espacement entre les étoiles et la note */
+.star-rating {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Affichage de la note */
+  .rating-text {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  /* Image du produit */
+  .product-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+  }
+  /* Conteneur des avis */
+  .reviews-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* Section de chaque avis */
+  .review-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Commentaire dans l'avis */
+  .review-item .comment {
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+.star-rating {
+    position: relative;
+    display: inline-block;
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+  
+  .star::before {
+    content: '★';
+  }
+  
+  .star {
+    width: 24px; /* Taille de l'étoile */
+    height: 24px;
+    position: relative;
+    display: inline-block;
+    background-color: #ccc; /* Couleur de l'étoile vide */
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); /* Forme d'une étoile */
+    overflow: hidden;
+    margin-right: 5px;
+  }
+  
+  .filled {
+    width: 0; /* Début à 0%, sera ajusté par JS */
+    height: 100%;
+    background-color: gold; /* Couleur de l'étoile remplie */
+    clip-path: inherit; /* Même forme que l'étoile */
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .star .filled::before {
+    content: '★';
+  }
+  

@@ -24,11 +24,9 @@ namespace Application.Models
 
         // Get the total price of the cart
         public decimal GetPrice(){
-            // Get the list of items in the cart
-            IEnumerable<Item> items = this.cartItems.Select(ci => ci.item);
             decimal finalPrice=0;
-            foreach (Item i in items){
-                finalPrice+=i.price;
+            foreach (CartItem cartItem in this.cartItems){
+                finalPrice+=cartItem.item.price*cartItem.quantity;
             }
             return finalPrice;
         }

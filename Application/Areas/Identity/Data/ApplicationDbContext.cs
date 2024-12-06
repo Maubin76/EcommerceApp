@@ -16,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
     public DbSet<Item> Items {get;set;}
     public DbSet<Cart> Carts { get; set; }
+    public DbSet<Review> Reviews{get; set;}
     public DbSet<CartItem> CartItems { get; set; } // Entité de liaison
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -48,9 +49,38 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // Configuration for Item
         builder.Entity<Item>()
         .HasKey(i => i.id); // Primary key Item
-
         
-    
+        //Configuration for Review
+        builder.Entity<Review>()
+        .HasKey(r=>r.id); // Primary key Review
+    }
+
+    public List<CartItem> GetAllOdersFromUser(String UserId)
+    {
+        // Retrieve all CartItems related to a user's carts
+        var orders = CartItems
+            .Where(ci => ci.cart.userId == UserId) // Filter by UserId in Cart
+            .ToList();
+
+        return orders;
+    }
+
+    public List<Review> GetAllReviewsFromUer(String UserId)
+    {
+        var reviews = Reviews
+            .Where(ci => ci.userId == UserId)
+            .ToList();
+
+        return reviews;
+    }
+
+    public List<Review> GetAllReviewsOfItem(int ItemId)
+    {
+        var reviews = Reviews
+            .Where(ci => ci.itemId == ItemId)
+            .ToList();
+
+        return reviews;
     }
 }
 
