@@ -15,9 +15,9 @@ namespace API.Controllers
             _context = context;
         }
 
-        // Create or edit
+        // Create
         [HttpPost]
-        public JsonResult CreateEdit(ApplicationUser user)
+        public JsonResult Create(ApplicationUser user)
         {
             var userInDB = _context.Users.Find(user.Id);
 

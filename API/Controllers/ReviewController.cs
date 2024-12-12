@@ -16,9 +16,9 @@ namespace API.Controllers
             _context = context;
         }
 
-        // Create or Edit
+        // Create
         [HttpPost]
-        public JsonResult CreateEdit(Review review)
+        public JsonResult Create(Review review)
         {
             var reviewInDB = _context.Reviews.Find(review.id);
 
@@ -45,7 +45,7 @@ namespace API.Controllers
             var result = _context.Reviews.Find(id);
             if (result == null) return new JsonResult(NotFound());
 
-            _context.Users.Remove(result);
+            _context.Reviews.Remove(result);
             _context.SaveChanges();
 
             return new JsonResult(NoContent());
@@ -64,7 +64,7 @@ namespace API.Controllers
         [HttpGet()]
         public JsonResult GetReviewsFromUser(String userId)
         {
-            var result = _context.GetAllOdersFromUser(userId);
+            var result = _context.GetAllReviewsFromUer(userId);
 
             return new JsonResult(Ok(result));
         }
